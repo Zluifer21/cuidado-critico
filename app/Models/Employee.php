@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class Employee extends Model
 {
@@ -17,7 +18,7 @@ class Employee extends Model
         'last_name',
         'phone'
     ];
-
+    protected $appends = ['manager'];
     protected $casts = [
         'id' => 'integer',
         'dni' => 'integer',
@@ -44,5 +45,15 @@ class Employee extends Model
     public function department():BelongsToMany
     {
         return $this->belongsToMany(Department::class,'departments_employees','employee_id','department_id')->withPivot('role');
+    }
+
+    public function getManagerAttribute()
+    {
+        $manager = DB::table('departments_employees')
+            ->join('employees','departments_employees.employee_id','=','employees.id')
+            ->where('role','lead')
+            ->where('department_id',$this->department()->first()->pivot->department_id)
+            ->first();
+        return $manager ?? null;
     }
 }

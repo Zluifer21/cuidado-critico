@@ -32,7 +32,9 @@ class RequestAPIController extends AppBaseController
         $requests = $this->requestRepository->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
-            $request->get('limit')
+            $request->get('limit'),
+            ['*'],
+            ['employee','type','medias']
         );
 
         return $this->sendResponse($requests->toArray(), 'Requests retrieved successfully');

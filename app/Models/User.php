@@ -43,4 +43,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function employee(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Employee::class,'user_id','id')->with(['department']);
+    }
 }

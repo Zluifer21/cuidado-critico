@@ -20,8 +20,8 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->smallInteger('long');
-            $table->text('obvservations');
-            $table->enum('status',['open','approve','rejected']);
+            $table->text('observations');
+            $table->enum('status',['open','approve','rejected'])->default('open');
             $table->timestamps();
             $table->foreign('request_type_id')->references('id')->on('request_types');
             $table->foreign('employee_id')->references('id')->on('employees');

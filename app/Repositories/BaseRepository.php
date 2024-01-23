@@ -64,10 +64,10 @@ abstract class BaseRepository
     /**
      * Build a query for retrieving all records.
      */
-    public function allQuery(array $search = [], int $skip = null, int $limit = null): Builder
+    public function allQuery(array $search = [], int $skip = null, int $limit = null,$relations=[]): Builder
     {
-        $query = $this->model->newQuery();
-
+        $query = $this->model;
+        if (!empty($relations)) $query = $query->with($relations);
         if (count($search)) {
             foreach($search as $key => $value) {
                 if (in_array($key, $this->getFieldsSearchable())) {
@@ -90,11 +90,10 @@ abstract class BaseRepository
     /**
      * Retrieve all records with given filter criteria
      */
-    public function all(array $search = [], int $skip = null, int $limit = null, array $columns = ['*']): Collection
+    public function all(array $search = [], int $skip = null, int $limit = null, array $columns = ['*'],$relations=[]): Collection
     {
-        $query = $this->allQuery($search, $skip, $limit);
-
-        return $query->get($columns);
+        $query = $this->allQuery($search, $skip, $limit, $relations);
+        return $query->get();
     }
 
     /**

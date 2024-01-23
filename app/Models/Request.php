@@ -17,7 +17,7 @@ class Request extends Model implements Auditable
         'date',
         'time',
         'long',
-        'obvservations',
+        'observations',
         'status'
     ];
 
@@ -28,18 +28,23 @@ class Request extends Model implements Auditable
         'date' => 'date',
         'time' => 'datetime',
         'long' => 'integer',
-        'obvservations' => 'string',
+        'observations' => 'string',
         'status' => 'string'
     ];
 
 
     public function employee(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\Employee::class, 'id', 'employee_id');
+        return $this->belongsTo(\App\Models\Employee::class, 'employee_id', 'id');
     }
 
     public function type(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\RequestType::class, 'id', 'request_type_id');
+        return $this->belongsTo(\App\Models\RequestType::class, 'request_type_id', 'id');
+    }
+
+    public function medias()
+    {
+        return $this->morphMany(Media::class, 'medias');
     }
 }

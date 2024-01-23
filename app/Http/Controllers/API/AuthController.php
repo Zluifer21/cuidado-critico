@@ -19,7 +19,10 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = User::where('email', $request->email)->first();
             $token = $user->createToken('token-name')->plainTextToken;
-            return response()->json(['token' => $token], 200);
+            $user->load(['employee']);
+
+            return response()->json(['token' => $token,'user'=>
+            $user->employee], 200);
         } else {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
