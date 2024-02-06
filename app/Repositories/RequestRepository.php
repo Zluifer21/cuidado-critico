@@ -26,4 +26,22 @@ class RequestRepository extends BaseRepository
     {
         return Request::class;
     }
+
+    public function getAll()
+    {
+        $idsDepartmentsWhereUserIsLead = auth()->user()->employee->department()->wherePivot('role','lead')->pluck('departments.id');
+
+        if(count($idsDepartmentsWhereUserIsLead)>0)
+        {
+            return $this->model->whereHas('employee',function($q) use ($idsDepartmentsWhereUserIsLead){
+                $q->whereHas('department',function($q) use ($idsDepartmentsWhereUserIsLead){
+                    $q->whereIn('department_id',$idsDepartmentsWhereUserIsLead);
+                });
+            })->get();
+        }else{
+            return $this->model->where('employee_id',auth()->user()->id)->get();
+        }
+
+    }
+
 }

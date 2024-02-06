@@ -10,6 +10,7 @@ use App\Repositories\RequestRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class RequestAPIController
@@ -29,14 +30,8 @@ class RequestAPIController extends AppBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $requests = $this->requestRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit'),
-            ['*'],
-            ['employee','type','medias']
-        );
 
+        $requests = $this->requestRepository->getAll();
         return $this->sendResponse($requests->toArray(), 'Requests retrieved successfully');
     }
 
@@ -47,10 +42,17 @@ class RequestAPIController extends AppBaseController
     public function store(CreateRequestAPIRequest $request): JsonResponse
     {
         $input = $request->all();
-
-        $request = $this->requestRepository->create($input);
-
-        return $this->sendResponse($request->toArray(), 'Request saved successfully');
+        $input['employee_id'] = auth()->user()->employee->id;
+        $new_request = $this->requestRepository->create($input);
+        foreach ($input['files'] as $file) {
+           $path=$file->store('public/'.auth()->user()->employee->dni.'/requests');
+              $new_request->medias()->create([
+                'url'=>$path,
+                'name'=>$file->getClientOriginalName()
+              ]);
+        }
+        $new_request->load('medias');
+        return $this->sendResponse($new_request->toArray(), 'Request saved successfully');
     }
 
     /**
