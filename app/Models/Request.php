@@ -32,6 +32,14 @@ class Request extends Model implements Auditable
         'status' => 'string'
     ];
 
+    public static array $rules = [
+        'request_type_id' => 'required|exists:request_types,id',
+        'date' => 'required|date',
+        'time' => 'required|date_format:H:i:s',
+        'long' => 'required|integer',
+        'observations' => 'required|string',
+        'files.*' => 'nullable|file|mimes:jpeg,png,pdf,docx|max:2048',
+    ];
 
     public function employee(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
