@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class Media extends Model
 {
@@ -24,5 +26,12 @@ use SoftDeletes;
     public function medias()
     {
         return $this->morphTo();
+    }
+
+    public function url():Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => url(Storage::url($value)),
+        );
     }
 }
