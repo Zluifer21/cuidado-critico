@@ -43,7 +43,7 @@ class Request extends Model implements Auditable
 
     public function employee(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\Employee::class, 'employee_id', 'id');
+        return $this->belongsTo(\App\Models\Employee::class, 'employee_id', 'id')->with(['department']);
     }
 
     public function type(): \Illuminate\Database\Eloquent\Relations\BelongsTo

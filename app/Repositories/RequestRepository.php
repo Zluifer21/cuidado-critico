@@ -37,9 +37,9 @@ class RequestRepository extends BaseRepository
                 $q->whereHas('department',function($q) use ($idsDepartmentsWhereUserIsLead){
                     $q->whereIn('department_id',$idsDepartmentsWhereUserIsLead);
                 });
-            })->get();
+            })->with('employee','medias','type')->get();
         }else{
-            return $this->model->where('employee_id',auth()->user()->id)->get();
+            return $this->model->where('employee_id',auth()->user()->id)->with('employee','medias','type')->get();
         }
 
     }
