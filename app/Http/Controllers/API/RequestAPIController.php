@@ -30,14 +30,8 @@ class RequestAPIController extends AppBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $requests = $this->requestRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit'),
-            ['*'],
-            ['employee','type','medias']
-        );
 
+        $requests = $this->requestRepository->getAll();
         return $this->sendResponse($requests->toArray(), 'Requests retrieved successfully');
     }
 
