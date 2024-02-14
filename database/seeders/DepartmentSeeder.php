@@ -15,10 +15,12 @@ class DepartmentSeeder extends Seeder
     {
 
         $departments = [
-            ['name' => 'administrativo'],
-            ['name' => 'asistencial'],
-            ['name' => 'contabilidad'],
-            ['name' => 'gerencia'],
+            ['name' => 'administracion', 'display_name' => 'administrativo'],
+            ['name' => 'asistencial', 'display_name' => 'asistencial'],
+            ['name' => 'facturacion', 'display_name' => 'administrativo'],
+            ['name' => 'gerencia', 'display_name' => 'gerencia'],
+            ['name' => 'financiero', 'display_name' => 'administrativo'],
+
         ];
 
         Department::insert($departments);
