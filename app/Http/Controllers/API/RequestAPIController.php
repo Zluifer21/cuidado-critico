@@ -10,6 +10,7 @@ use App\Repositories\RequestRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -41,18 +42,28 @@ class RequestAPIController extends AppBaseController
      */
     public function store(CreateRequestAPIRequest $request): JsonResponse
     {
-        $input = $request->all();
-        $input['employee_id'] = auth()->user()->employee->id;
-        $new_request = $this->requestRepository->create($input);
-        foreach ($input['files'] as $file) {
-           $path=$file->store('public/'.auth()->user()->employee->dni.'/requests');
-              $new_request->medias()->create([
-                'url'=>$path,
-                'name'=>$file->getClientOriginalName()
-              ]);
+        DB::beginTransaction();
+        try {
+            $input = $request->all();
+            $input['employee_id'] = auth()->user()->employee->id;
+            $new_request = $this->requestRepository->create($input);
+            if (isset($input['files'])) {
+                foreach ($input['files'] as $file) {
+                    $path = $file->store('public/' . auth()->user()->employee->dni . '/requests');
+                    $new_request->medias()->create([
+                        'url' => $path,
+                        'name' => $file->getClientOriginalName()
+                    ]);
+                }
+            }
+            $new_request->load('medias');
+            DB::commit();
+            return $this->sendResponse($new_request->toArray(), 'Request saved successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('Error saving request');
         }
-        $new_request->load('medias');
-        return $this->sendResponse($new_request->toArray(), 'Request saved successfully');
+
     }
 
     /**
@@ -115,6 +126,6 @@ class RequestAPIController extends AppBaseController
     {
         $types = RequestType::all();
 
-        return $this->sendResponse($types,'');
+        return $this->sendResponse($types, '');
     }
 }
