@@ -16,7 +16,8 @@ class Employee extends Model
         'identity_type_id',
         'first_name',
         'last_name',
-        'phone'
+        'phone',
+        'user_id'
     ];
     protected $appends = ['manager'];
     protected $casts = [
@@ -34,25 +35,25 @@ class Employee extends Model
 
     public function identity(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\IdentityType::class, 'id', 'identity_type_id');
+        return $this->belongsTo(\App\Models\IdentityType::class, 'identity_type_id', 'id');
     }
 
-    public function user():BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class,'id','user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function department():BelongsToMany
+    public function department(): BelongsToMany
     {
-        return $this->belongsToMany(Department::class,'departments_employees','employee_id','department_id')->withPivot('role');
+        return $this->belongsToMany(Department::class, 'departments_employees', 'employee_id', 'department_id')->withPivot('role');
     }
 
     public function getManagerAttribute()
     {
         $manager = DB::table('departments_employees')
-            ->join('employees','departments_employees.employee_id','=','employees.id')
-            ->where('role','lead')
-            ->where('department_id',$this->department()->first()->pivot->department_id)
+            ->join('employees', 'departments_employees.employee_id', '=', 'employees.id')
+            ->where('role', 'lead')
+            ->where('department_id', $this->department()->first()->pivot->department_id)
             ->first();
         return $manager ?? null;
     }

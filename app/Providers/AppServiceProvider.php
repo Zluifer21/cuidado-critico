@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Request;
 use Illuminate\Support\ServiceProvider;
+use App\Observers\RequestObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Request::observe(RequestObserver::class);
     }
 }
