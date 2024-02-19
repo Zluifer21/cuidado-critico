@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -49,7 +50,7 @@ class RequestAPIController extends AppBaseController
             $new_request = $this->requestRepository->create($input);
             if (isset($input['files'])) {
                 foreach ($input['files'] as $file) {
-                    $path = $file->store('public/' . auth()->user()->employee->dni . '/requests');
+                    $path = $file->storeAs('public/' . auth()->user()->employee->dni . '/requests');
                     $new_request->medias()->create([
                         'url' => $path,
                         'name' => $file->getClientOriginalName()
@@ -60,6 +61,7 @@ class RequestAPIController extends AppBaseController
             DB::commit();
             return $this->sendResponse($new_request->toArray(), 'Request saved successfully');
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             DB::rollBack();
             return $this->sendError('Error saving request');
         }
