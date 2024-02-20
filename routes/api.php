@@ -31,5 +31,6 @@ Route::middleware('auth:sanctum')->group(function (){
         ->except(['create', 'edit']);
 
     Route::get('request-types',[RequestAPIController::class,'getTypes']);
+    Route::post('requests/generatePDF', [RequestAPIController::class, 'generatePDF']);
 });
 Route::post('login',[AuthController::class,'login']);

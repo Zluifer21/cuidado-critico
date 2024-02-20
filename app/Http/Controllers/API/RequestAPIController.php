@@ -13,6 +13,9 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Support\Facades\Response;
 
 /**
  * Class RequestAPIController
@@ -65,7 +68,6 @@ class RequestAPIController extends AppBaseController
             DB::rollBack();
             return $this->sendError('Error saving request');
         }
-
     }
 
     /**
@@ -129,5 +131,26 @@ class RequestAPIController extends AppBaseController
         $types = RequestType::all();
 
         return $this->sendResponse($types, '');
+    }
+
+    public function generatePDF(Request $request)
+    {
+        $requests = $request->all();
+        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $dompdf->setOptions($options);
+        $html = view('requests.pdfs.request_status', compact('requests'))->render();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+
+        return Response::make(
+            $dompdf->output(),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="request_status.pdf"'
+            ]
+        );
     }
 }
