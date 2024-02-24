@@ -37,14 +37,15 @@ class SendStatusRequestEmailNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $pdf = PDF::loadView('requests/pdfs/request_status');
+        
         $mail = (new MailMessage)
             ->subject('Your Subject Here')
-            ->greeting('Hello!' . $this->data['name'])
+            ->greeting('Hola! ' . $this->data['name'])
             ->line($this->data['body']);
 
         if (isset($this->data['status'])
             && $this->data['status'] == 'approved') {
+            $pdf = PDF::loadView('requests/pdfs/request_status');
             $mail->attachData($pdf->output(), 'request_status.pdf');
         }
 

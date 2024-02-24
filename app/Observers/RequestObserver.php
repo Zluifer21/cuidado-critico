@@ -16,7 +16,7 @@ class RequestObserver
 
         $data = [
             'name' => $user->employee->first_name . ' ' . $user->employee->last_name,
-            'body' => 'Your request has been created'
+            'body' => 'Tu permiso ha sido creado'
         ];
 
         $user->notify(new SendStatusRequestEmailNotification($data));
@@ -32,14 +32,14 @@ class RequestObserver
         if ($request->status == 'approved') {
             $data = [
                 'name' => $request->employee->name,
-                'body' => 'Your request has been approved',
+                'body' => 'Tu permiso ha sido aprovado',
                 'status' => 'approved',
                 'request' => $request
             ];
         } else if ($request->status == 'rejected') {
             $data = [
                 'name' => $request->employee->name,
-                'body' => 'Your request has been rejected'
+                'body' => 'Tu permiso ha sido rechazado'
             ];
         }
 

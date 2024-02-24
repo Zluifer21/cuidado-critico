@@ -13,8 +13,7 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Support\Facades\Response;
 
 /**
@@ -133,19 +132,13 @@ class RequestAPIController extends AppBaseController
         return $this->sendResponse($types, '');
     }
 
-    public function generatePDF(Request $request)
+    public function generatePDF(RequestModel $request)
     {
-        $requests = $request->all();
-        $dompdf = new Dompdf();
-        $options = new Options();
-        $options->set('defaultFont', 'Arial');
-        $dompdf->setOptions($options);
-        $html = view('requests.pdfs.request_status', compact('requests'))->render();
-        $dompdf->loadHtml($html);
-        $dompdf->render();
+        $request->load('employee');
+        $pdf = PDF::loadView('requests/pdfs/request_status', compact('request'));
 
         return Response::make(
-            $dompdf->output(),
+            $pdf->output(),
             200,
             [
                 'Content-Type' => 'application/pdf',

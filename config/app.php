@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Cuidado Critico'),
     'log' => 'daily',
     /*
     |--------------------------------------------------------------------   ------
@@ -122,6 +122,7 @@ return [
     | will not be safe. Please do this before deploying an application!
     |
     */
+    'public_path' => public_path(),
 
     'key' => env('APP_KEY'),
 
