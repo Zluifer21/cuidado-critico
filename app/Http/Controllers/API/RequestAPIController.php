@@ -52,8 +52,7 @@ class RequestAPIController extends AppBaseController
             $new_request = $this->requestRepository->create($input);
             if (isset($input['files'])) {
                 foreach ($input['files'] as $file) {
-                    $path = $file->storeAs('public/' . auth()->user()->employee->dni . '/requestes');
-                    Log::debug($path);
+                    $path = Storage::disk('public')->put('requests', $file);
                     $new_request->medias()->create([
                         'url' => $path,
                         'name' => $file->getClientOriginalName()
