@@ -13,7 +13,7 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\Response;
 
 /**
@@ -52,10 +52,8 @@ class RequestAPIController extends AppBaseController
             $new_request = $this->requestRepository->create($input);
             if (isset($input['files'])) {
                 foreach ($input['files'] as $file) {
-                    //$path = $file->storeAs('public/' . auth()->user()->employee->dni . '/requests',['disk'=>'public']);
                     $path = Storage::disk('public')->put('request', $file);
-                    Log::debug($path);
-                     $new_request->medias()->create([
+                    $new_request->medias()->create([
                         'url' => $path,
                         'name' => $file->getClientOriginalName()
                     ]);
