@@ -397,7 +397,21 @@
 <table style="height: 5px; width: 100%;" border="1">
     <tbody>
     <tr>
-        <td style="text-align: center;"><strong>OBSERVACIONES</strong></td>
+        <td style="text-align: center;"><strong>OBSERVACIONES TRABAJADOR</strong></td>
+    </tr>
+    </tbody>
+</table>
+<table style="width: 100%;">
+    <tbody>
+    <tr>
+        <td style="height: 97px; width: 100%; border: 1px solid #000;">{{ $request->observations}}</td>
+    </tr>
+    </tbody>
+</table>
+<table style="height: 5px; width: 100%;" border="1">
+    <tbody>
+    <tr>
+        <td style="text-align: center;"><strong>OBSERVACIONES JEFE INMEDIATO</strong></td>
     </tr>
     </tbody>
 </table>
