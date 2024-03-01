@@ -18,7 +18,8 @@ class Request extends Model implements Auditable
         'time',
         'long',
         'observations',
-        'status'
+        'status',
+        'reason'
     ];
 
     protected $casts = [

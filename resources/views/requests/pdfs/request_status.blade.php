@@ -107,7 +107,8 @@
 
     <tr style="width: 100%;">
         <td style="width: 20%;">NOMBRE COMPLETO</td>
-        <td colspan="3" style="width: 79%; border: 1px solid #000;">{{ $request->employee->first_name }} {{ $request->employee->last_name }}</td>
+        <td colspan="3"
+            style="width: 79%; border: 1px solid #000;">{{ $request->employee->first_name }} {{ $request->employee->last_name }}</td>
         <td style="width: 1%;"></td>
     </tr>
 
@@ -137,7 +138,8 @@
 
     <tr style="width: 100%;">
         <td style="width: 20%;">JEFE INMEDIATO&nbsp;</td>
-        <td colspan="3" style="width: 79%; border: 1px solid #000;">{{ $request->employee->manager->first_name}} {{ $request->employee->manager->last_name}}</td>
+        <td colspan="3"
+            style="width: 79%; border: 1px solid #000;">{{ $request->employee->manager->first_name}} {{ $request->employee->manager->last_name}}</td>
         <td style="width: 1%;"></td>
     </tr>
 
@@ -218,10 +220,12 @@
     <tr>
         <td style="width: 21%;">HORA PERMISO</td>
         <td style="width: 5%;">&nbsp;</td>
-        <td colspan="3" style="width: 24%; border: 1px solid #000;  text-align: center;">{{ date('g:i A', strtotime($request['time'])) }}</td>
+        <td colspan="3"
+            style="width: 24%; border: 1px solid #000;  text-align: center;">{{ date('g:i A', strtotime($request['time'])) }}</td>
         <td style="width: 5%;">&nbsp;</td>
         <td style="width: 21%;">DURACION PERMISO</td>
-        <td colspan="3" style="width: 23%; border: 1px solid #000;  text-align: center;">{{ $request['long'] }} {{ $request['long'] == 1 ? 'hora' : 'horas' }}</td>
+        <td colspan="3"
+            style="width: 23%; border: 1px solid #000;  text-align: center;">{{ $request['long'] }} {{ $request['long'] == 1 ? 'hora' : 'horas' }}</td>
         <td style="width: 1%;"></td>
     </tr>
 
@@ -271,18 +275,18 @@
         <td style="width: 21%;">CALAMIDAD DOMESTICA</td>
         <td style="width: 5%;">&nbsp;</td>
         <td style="width: 8%; border: 1px solid #000;  text-align: center;">@if ($request['type']['id'] == 1)
-                    X
-                    @endif
-                </td>
+                X
+            @endif
+        </td>
         <td style="width: 8%;">&nbsp;</td>
         <td style="width: 8%;">&nbsp;</td>
         <td style="width: 5%;">&nbsp;</td>
         <td style="width: 21%;">CONSULTA MEDICA</td>
         <td style="width: 8%; border: 1px solid #000;">&nbsp;</td>
         <td style="width: 8%;  text-align: center;">@if ($request['type']['id'] == 2)
-                    X
-                    @endif
-                </td>
+                X
+            @endif
+        </td>
         <td style="width: 7%;">&nbsp;</td>
         <td style="width: 1%;"></td>
     </tr>
@@ -305,17 +309,17 @@
         <td style="width: 21%;">LICENCIA NO REMUNERADA</td>
         <td style="width: 5%;">&nbsp;</td>
         <td style="width: 8%; border: 1px solid #000;  text-align: center;">@if ($request['type']['id'] == 3)
-                    X
-                    @endif
-                </td>
+                X
+            @endif
+        </td>
         <td style="width: 8%;">&nbsp;</td>
         <td style="width: 8%;">&nbsp;</td>
         <td style="width: 5%;">&nbsp;</td>
         <td style="width: 21%;">ASUNTO PERSONAL</td>
         <td style="width: 8%; border: 1px solid #000;">&nbsp;</td>
         <td style="width: 8%;  text-align: center;">@if ($request['type']['id'] == 4)
-                    X
-                    @endif</td>
+                X
+            @endif</td>
         <td style="width: 7%;">&nbsp;</td>
         <td style="width: 1%;"></td>
     </tr>
@@ -338,15 +342,16 @@
         <td style="width: 21%;">LICENCIA REMUNERADA</td>
         <td style="width: 5%;">&nbsp;</td>
         <td style="width: 8%; border: 1px solid #000; text-align: center;">@if ($request['type']['id'] == 5)
-                    X @endif</td>
+                X
+            @endif</td>
         <td style="width: 8%;">&nbsp;</td>
         <td style="width: 8%;">&nbsp;</td>
         <td style="width: 5%;">&nbsp;</td>
         <td style="width: 21%;">ASUNTOS LABORALES</td>
         <td style="width: 8%; border: 1px solid #000;">&nbsp;</td>
         <td style="width: 8%;  text-align: center;">@if ($request['type']['id'] == 6)
-                    X
-                    @endif</td>
+                X
+            @endif</td>
         <td style="width: 7%;">&nbsp;</td>
         <td style="width: 1%;"></td>
     </tr>
@@ -411,9 +416,11 @@
 <table style="height: 97px; border: 1px solid #000;" width="100%">
     <tbody>
     <tr style="height: 66px;">
-        <td style="width: 50%; height: 66px;text-align: center;"><img src="{{ public_path('img/firmas/' . $request->employee->dni . '.jpg') }}"
-                                                                         style="max-width: 100%; max-height: 100%;"></td>
-        <td style="width: 50%; height: 66px;text-align: center;"><img src="{{ public_path('img/firmas/' . $request->employee->manager->dni . '.jpg') }}"
+        <td style="width: 50%; height: 66px;text-align: center;"><img
+                src="{{ public_path('img/firmas/'.$request->employee->dni . '.jpg') }}"
+                style="max-width: 100%; max-height: 100%;"></td>
+        <td style="width: 50%; height: 66px;text-align: center;"><img
+                src="{{ public_path('img/firmas/'.$request->employee->manager->dni . '.jpg') }}"
                                                                          style="max-width: 100%; max-height: 100%;"></td>
     </tr>
     <tr style="height: 25.7344px;">

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,7 +20,8 @@ return new class extends Migration
             $table->time('time');
             $table->smallInteger('long');
             $table->text('observations');
-            $table->enum('status',['open','approve','rejected'])->default('open');
+            $table->enum('status', ['open', 'approved', 'rejected'])->default('open');
+            $table->string('reason')->nullable();
             $table->timestamps();
             $table->foreign('request_type_id')->references('id')->on('request_types');
             $table->foreign('employee_id')->references('id')->on('employees');
