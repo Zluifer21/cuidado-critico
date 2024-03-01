@@ -22,7 +22,6 @@ class RequestObserver
         ];
 
         $user->notify(new SendStatusRequestEmailNotification($data));
-
     }
 
     /**
@@ -30,29 +29,29 @@ class RequestObserver
      */
     public function updated(Request $request): void
     {
-        Log::debug($request->status);
         try {
             $user = $request->employee->user;
             $request->load('employee');
-            if ($request->status === StatusEnum::APPROVED) {
-                $data = [
-                    'name' => $user->employee->first_name . ' ' . $user->employee->last_name,
-                    'body' => 'Tu permiso ha sido aprovado',
-                    'status' => 'approved',
-                    'request' => $request
-                ];
-            } else if ($request->status === StatusEnum::REJECTED) {
-                $data = [
-                    'name' => $user->employee->first_name . ' ' . $user->employee->last_name,
-                    'body' => 'Tu permiso ha sido rechazado'
-                ];
-            }
+            if ($request->isDirty('status')) {
+                if ($request->status === StatusEnum::APPROVED) {
+                    $data = [
+                        'name' => $user->employee->first_name . ' ' . $user->employee->last_name,
+                        'body' => 'Tu permiso ha sido aprobado',
+                        'status' => 'approved',
+                        'request' => $request
+                    ];
+                } else if ($request->status === StatusEnum::REJECTED) {
+                    $data = [
+                        'name' => $user->employee->first_name . ' ' . $user->employee->last_name,
+                        'body' => 'Tu permiso ha sido rechazado'
+                    ];
+                }
 
-            $user->notify(new SendStatusRequestEmailNotification($data));
+                $user->notify(new SendStatusRequestEmailNotification($data));
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-
     }
 
     /**
