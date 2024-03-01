@@ -2,8 +2,10 @@
 
 namespace App\Observers;
 
+use App\Enums\StatusEnum;
 use App\Models\Request;
 use App\Notifications\SendStatusRequestEmailNotification;
+use Illuminate\Support\Facades\Log;
 
 class RequestObserver
 {
@@ -28,22 +30,29 @@ class RequestObserver
      */
     public function updated(Request $request): void
     {
-        $user = $request->employee->user;
-        if ($request->status == 'approved') {
-            $data = [
-                'name' => $request->employee->name,
-                'body' => 'Tu permiso ha sido aprovado',
-                'status' => 'approved',
-                'request' => $request
-            ];
-        } else if ($request->status == 'rejected') {
-            $data = [
-                'name' => $request->employee->name,
-                'body' => 'Tu permiso ha sido rechazado'
-            ];
+        Log::debug($request->status);
+        try {
+            $user = $request->employee->user;
+            $request->load('employee');
+            if ($request->status === StatusEnum::APPROVED) {
+                $data = [
+                    'name' => $user->employee->first_name . ' ' . $user->employee->last_name,
+                    'body' => 'Tu permiso ha sido aprovado',
+                    'status' => 'approved',
+                    'request' => $request
+                ];
+            } else if ($request->status === StatusEnum::REJECTED) {
+                $data = [
+                    'name' => $user->employee->first_name . ' ' . $user->employee->last_name,
+                    'body' => 'Tu permiso ha sido rechazado'
+                ];
+            }
+
+            $user->notify(new SendStatusRequestEmailNotification($data));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
         }
 
-        $user->notify(new SendStatusRequestEmailNotification($data));
     }
 
     /**

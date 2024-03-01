@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -37,15 +37,16 @@ class SendStatusRequestEmailNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        
+
         $mail = (new MailMessage)
-            ->subject('Your Subject Here')
+            ->subject('Solicitud de permiso')
             ->greeting('Hola! ' . $this->data['name'])
             ->line($this->data['body']);
 
         if (isset($this->data['status'])
             && $this->data['status'] == 'approved') {
-            $pdf = PDF::loadView('requests/pdfs/request_status');
+            $request = $this->data['request'];
+            $pdf = PDF::loadView('requests/pdfs/request_status', ['request' => $request]);
             $mail->attachData($pdf->output(), 'request_status.pdf');
         }
 

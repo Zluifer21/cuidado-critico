@@ -91,18 +91,27 @@ class RequestAPIController extends AppBaseController
      */
     public function update($id, UpdateRequestAPIRequest $request): JsonResponse
     {
-        $input = $request->all();
+        DB::beginTransaction();
+        try {
+            $input = $request->all();
 
-        /** @var Request $request */
-        $request = $this->requestRepository->find($id);
+            /** @var Request $request */
+            $request = $this->requestRepository->find($id);
 
-        if (empty($request)) {
-            return $this->sendError('Request not found');
+            if (empty($request)) {
+                return $this->sendError('Request not found');
+            }
+
+            $request = $this->requestRepository->update($input, $id);
+            DB::commit();
+            return $this->sendResponse($request->toArray(), 'Request updated successfully');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            DB::rollBack();
+            return $this->sendError('Error updating request');
+
         }
 
-        $request = $this->requestRepository->update($input, $id);
-
-        return $this->sendResponse($request->toArray(), 'Request updated successfully');
     }
 
     /**
