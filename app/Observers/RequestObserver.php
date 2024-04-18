@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Enums\StatusEnum;
 use App\Models\Request;
+use App\Models\User;
 use App\Notifications\SendStatusRequestEmailNotification;
 use Illuminate\Support\Facades\Log;
 
@@ -15,13 +16,19 @@ class RequestObserver
     public function created(Request $request): void
     {
         $user = $request->employee->user;
+        $manager = User::find($request->employee->manager->user_id);
 
         $data = [
             'name' => $user->employee->first_name . ' ' . $user->employee->last_name,
             'body' => 'Tu permiso ha sido creado'
         ];
+        $dataManager = [
+            'name' => $manager->employee->first_name . ' ' . $manager->employee->last_name,
+            'body' => 'Se ha creado un permiso para ' . $user->employee->first_name . ' ' . $user->employee->last_name
+        ];
 
         $user->notify(new SendStatusRequestEmailNotification($data));
+        $manager->notify(new SendStatusRequestEmailNotification($dataManager));
     }
 
     /**
