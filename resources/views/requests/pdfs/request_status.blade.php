@@ -423,7 +423,7 @@
 <table style="width: 100%;">
     <tbody>
     <tr>
-        <td style="height: 97px; width: 100%; border: 1px solid #000;">{{ $request->observations}}</td>
+        <td style="height: 97px; width: 100%; border: 1px solid #000;">{{ $request->reason}}</td>
     </tr>
     </tbody>
 </table>
