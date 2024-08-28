@@ -17,7 +17,7 @@ class Department extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'description' => 'integer'
+        'description' => 'string'
     ];
 
     public static array $rules = [

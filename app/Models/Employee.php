@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +16,8 @@ class Employee extends Model
         'first_name',
         'last_name',
         'phone',
-        'user_id'
+        'user_id',
+        'title'
     ];
     protected $appends = ['manager'];
     protected $casts = [
@@ -26,7 +26,8 @@ class Employee extends Model
         'identity_type_id' => 'integer',
         'first_name' => 'string',
         'last_name' => 'string',
-        'phone' => 'integer'
+        'phone' => 'integer',
+        'title' => 'string'
     ];
 
     public static array $rules = [
@@ -50,11 +51,18 @@ class Employee extends Model
 
     public function getManagerAttribute()
     {
+        $department = $this->department()->first();
+
+        if (!$department) {
+            return null;
+        }
+
         $manager = DB::table('departments_employees')
             ->join('employees', 'departments_employees.employee_id', '=', 'employees.id')
             ->where('role', 'lead')
-            ->where('department_id', $this->department()->first()->pivot->department_id)
+            ->where('department_id', $department->pivot->department_id)
             ->first();
+
         return $manager ?? null;
     }
 }
