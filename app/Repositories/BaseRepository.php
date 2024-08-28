@@ -66,7 +66,7 @@ abstract class BaseRepository
      */
     public function allQuery(array $search = [], int $skip = null, int $limit = null,$relations=[]): Builder
     {
-        $query = $this->model;
+        $query = $this->model->newQuery();
         if (!empty($relations)) $query = $query->with($relations);
         if (count($search)) {
             foreach($search as $key => $value) {
